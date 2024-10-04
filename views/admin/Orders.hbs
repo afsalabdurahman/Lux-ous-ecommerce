@@ -1,0 +1,175 @@
+<style>
+    .body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: #888;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    thead {
+        background-color: #f5f5f5;
+    }
+
+    th,
+    td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        font-weight: 600;
+    }
+
+    .status {
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.9em;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .placed {
+        background-color: #f0ad4e;
+        color: white;
+    }
+
+    .paid {
+        background-color: #5cb85c;
+        color: white;
+    }
+
+    .detail-btn {
+        background-color: #5bc0de;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .detail-btn:hover {
+        background-color: #31b0d5;
+    }
+</style>
+
+<div class="body">
+    <div class="container">
+        <h1>Order List</h1>
+        <p>Lorem ipsum dolor sit amet.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>#ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Product Name</th>
+                    <th>Total</th>
+                    <th>Order Status</th>
+                    <th>Payment Status</th>
+                    <th>Order Placed Date</th>
+                    <th>Change Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each Data}}
+                {{#each items}}
+                <tr>
+
+                    <td>{{../OrderId}}</td>
+                    <td>{{../shippingAddress.fullName}}</td>
+                    <td>{{../userId.email}}</td>
+                    <td>{{productId.name}}</td>
+                    <td>₹{{totalPrice price quantity}}</td>
+                    {{#ifEquals update "Cancelled"}}
+
+                    <td><span style="color: red;" class="status">Order Cancelled</span></td>
+                    {{else ifEquals update "Shipped"}}
+
+                    <td><span style="color: rgb(11, 170, 219);" class="status">Product is Shipped</span></td>
+                    {{else ifEquals update "Delivered"}}
+                    <td><span style="color: red;" class="status">Delivered</span></td>
+                    {{else ifEquals update "Return"}}
+                    <td><span style="color: rgb(18, 186, 68);" class="status">Return request</span></td>
+
+                    {{else ifEquals update "Approve Return"}}
+                    <td><span style="color: rgb(24, 18, 186);" class="status">Return Approved</span></td>
+                    {{else}}
+                    <td><span style="color: rgb(240, 225, 10);" class="status">Order is pending</span></td>
+                    {{/ifEquals}}
+                    {{!-- {{else ifEquals orderStatus "Returned"}}
+                    <td><span style="color: rgb(18, 186, 68);" class="status">Approved Return</span></td>
+                    {{else}}
+                    <td><span class="status placed">Order Placed</span></td>
+
+                    {{/ifEquals}} --}}
+
+                    <td><span class="status paid">{{../paymentMethod}}</span></td>
+                    <td id="{{../_id}}">{{../orderedAt}}</td>
+                    <p id="date" style="display: none;">{{../_id}}</p>
+                    <td><a href="/admin/orderdetails?id={{_id}}"><button class="detail-btn">Detail</button></td>
+                    </a>
+                </tr>
+                {{/each}}
+                {{/each}}
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                {{#repeat count}}
+                <li class="page-item"><a class="page-link" href="/admin/orders?pageNo={{this}}">{{this}}</a></li>
+                {{/repeat}}
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+<script>
+    console.log({{ Data }}"idd")
+    let id = document.getElementById("date").innerHTML
+    let dateString = document.getElementById(id).innerHTML
+    const dateObject = new Date(dateString);
+    const day = dateObject.getDate();
+    const month = dateObject.toLocaleString('default', { month: 'long' });
+    const year = dateObject.getFullYear();
+
+    // Format the date as DD-MonthName-YYYY
+    const formattedDate = `${day}-${month}-${year}`;
+    document.getElementById(id).innerHTML = formattedDate
+
+</script>

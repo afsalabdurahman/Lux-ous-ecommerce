@@ -1,0 +1,382 @@
+<style>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    :root {
+        --primary-color: #3498db;
+        --secondary-color: #2ecc71;
+        --background-color: #f4f6f9;
+        --text-color: #333333;
+        --card-background: #ffffff;
+        --border-color: #e0e0e0;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: var(--background-color);
+        color: var(--text-color);
+    }
+
+    .container {
+        background-color: var(--card-background);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+    }
+
+    header h3 {
+        color: var(--primary-color);
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+
+    .filter {
+        margin-bottom: 2rem;
+    }
+
+    .dropdown-container label {
+        font-weight: 500;
+        margin-right: 0.5rem;
+    }
+
+    .dropdown {
+        padding: 0.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        background-color: var(--card-background);
+        color: var(--text-color);
+    }
+
+    .card {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        margin-bottom: 2rem;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+
+    .nav-link {
+        color: var(--primary-color);
+        font-weight: 500;
+    }
+
+    .price-wrap strong {
+        color: var(--secondary-color);
+        font-size: 1.1rem;
+    }
+
+    .btn-outline-primary {
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .pagination {
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .page-link {
+        color: var(--primary-color);
+        border-color: var(--border-color);
+    }
+
+    .page-link:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .page-item.active .page-link {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    <style>.filter-dropdown {
+        margin-bottom: 20px;
+    }
+
+    .dropdown-btn {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .dropdown-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .filter-section {
+        border: 1px solid #ddd;
+        padding: 20px;
+        margin-top: 10px;
+        display: none;
+    }
+
+    .filter-group {
+        margin-bottom: 15px;
+    }
+
+    .filter-group h4 {
+        margin-bottom: 10px;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+</style>
+</style>
+</style>
+
+
+
+
+<section>
+    <div class="container my-5">
+        <header class="mb-4">
+            <h3>Women's Collections</h3>
+        </header>
+        {{!-- filter.............................. --}}
+        <div class="row">
+            <div class="md-6">
+                <div class="filter">
+                    <div class="dropdown-container">
+                        <label for="sort-options">Sort By:</label>
+                        <select id="sort-options" class="dropdown">
+                            {{#if value}}
+                            <option value="new">{{value}}</option>
+                            {{else}}
+                            <option value="new-arrival">New Arrival</option>
+                            {{/if}}
+                            <option value="Low-Price">Low Price</option>
+                            <option value="High-Price">High Price</option>
+                            <option value="a-z">A-Z</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="md-6">
+                {{!-- fiters here.................. --}}
+                <div class="filter-dropdown" style="margin-left: 265px; margin-top:-67px">
+                    <button class="dropdown-btn" type="button" onclick="toggleFilters()">Show Filters</button>
+                    <form id="filter-form" action="/products/filter" method="POST"
+                        enctype="application/x-www-form-urlencoded">
+                        <div id="filter-section" class="filter-section">
+                            <h3>Filter by:</h3>
+
+
+                            <div class="filter-group">
+                                <h4>Gender</h4>
+                                <label><input type="radio" name="gender" value="men"> Men</label><br>
+                                <label><input type="radio" name="gender" value="women"> Women</label><br>
+                                <label><input type="radio" name="gender" value="kids"> Kids</label>
+                            </div>
+                            <!-- Size Filter -->
+
+                            <div class="filter-group">
+                                <h4>Size</h4>
+                                <label><input type="checkbox" name="size" value="small"> Small</label><br>
+                                <label><input type="checkbox" name="size" value="medium"> Medium</label><br>
+                                <label><input type="checkbox" name="size" value="large"> Large</label>
+                            </div>
+
+                            <div class="filter-group">
+                                <h4>Price Range</h4>
+                                <label>Min: <input type="number" name="priceMin" placeholder="0"></label><br>
+                                <label>Max: <input type="number" name="priceMax" placeholder="1000"></label>
+                            </div>
+
+                            <!-- Color Filter -->
+                            <div class="filter-group">
+                                <h4>Color</h4>
+                                <label><input type="checkbox" name="color" value="red"> Red</label><br>
+                                <label><input type="checkbox" name="color" value="blue"> Blue</label><br>
+                                <label><input type="checkbox" name="color" value="black"> Black</label>
+                            </div>
+
+                            <!-- Brand Filter -->
+                            <div class="filter-group">
+                                <h4>Brand</h4>
+                                <label><input type="checkbox" name="brand" value="Symbol"> Symbol</label><br>
+                                <label><input type="checkbox" name="brand" value="Locomotive"> Locomotive</label><br>
+                                <label><input type="checkbox" name="brand" value="brandC"> Brand C</label>
+                            </div>
+
+                            <button type="submit">Apply Filters</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Display Section -->
+                <div id="product-list">
+                    <!-- Your product list will go here -->
+                </div>
+
+            </div>
+
+
+
+        </div>
+        {{!-- ............................................................. --}}
+        <div class="row">
+            {{#if newoffer}}
+            <div
+                style="margin-left: 0px; height:37px; background: linear-gradient(135deg, #ff7e5f, #feb47b); padding: 10px; border-radius: 8px; display: inline-block;">
+                <i class="fa-solid fa-tags" style="color: #ffffff; font-size: 18px; margin-right: 8px;"></i>
+                <p
+                    style="display: inline; color: #ffffff; font-size: 18px; font-family: 'Arial, sans-serif'; font-weight: bold; margin: 0;">
+                    {{newoffer.[0].name}} &nbsp; &nbsp; &nbsp; {{newoffer.[0].offerPercentage}}% OFF for these Products
+                    &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;
+                    &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;</p>
+                <p
+                    style="display: inline; margin-left:280px; color: #ffffff; font-size: 18px; font-family: 'Arial, sans-serif'; font-weight: bold;   ">
+                    Offer end &nbsp; &nbsp;{{newoffer.[0].validity}}</p>
+            </div>
+            {{else}}
+            {{/if}}
+
+            {{!-- dynamic Data--}}
+            {{#if products}}
+            {{#each products}}
+
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card px-4 border shadow-0">
+                    <div class="mask px-2" style="height: 50px;">
+
+                    </div>
+                    <a href="/details/?id={{_id}}" class="">
+
+                        <img src="/upload/{{image.[0]}}" class="card-img-top rounded-2" />
+                    </a>
+                    <div class="card-body d-flex flex-column pt-3 border-top">
+                        <a href="#" class="nav-link">{{name}} </a>
+                        <div class="price-wrap mb-2">
+                            <strong class="">₹{{price}}</strong>
+                        </div>
+                        <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
+                            <a href="" id="{{_id}}" class="btn btn-outline-primary" onclick="buy('{{_id}}')">
+                                <i class="fas fa-cart-plus"></i> Add to cart
+                            </a>
+                            <p>
+
+                            </p><a href="/details/?id={{_id}}" class="btn btn-outline-primary">
+                                <i class="fas fa-shopping-bag"></i> Buy now
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{/each}}
+            {{/if}}
+
+
+
+            {{!-- end dynamic --}}
+
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    {{#repeat count}}
+                    <li class="page-item"><a class="page-link" href="/women?pageNo={{this}}">{{this}}</a></li>
+                    {{/repeat}}
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+</section>
+
+<script>
+    document.getElementById('sort-options').addEventListener('change', function () {
+        const selectedValue = this.value;
+
+        if (selectedValue === 'new-arrival') {
+            // Scroll to the New Arrival section and redirect
+            window.scrollTo(0, 500); // Adjust the value to the position of your section
+            window.location.href = `women?id${"newarrival"}`; // Replace with your URL
+        } else if (selectedValue === 'Low-Price') {
+            // Scroll to the Low Price section and redirect
+            window.scrollTo(0, 1000); // Adjust the value to the position of your section
+            window.location.href = `women?id=${"LowPrice"}`; // Replace with your URL
+        } else if (selectedValue === 'High-Price') {
+            // Scroll to the High Price section and redirect
+            window.scrollTo(0, 1500); // Adjust the value to the position of your section
+            window.location.href = `women?id=${"HighPrice"}`; // Replace with your URL
+        } else if (selectedValue === 'a-z') {
+            // Scroll to the A-Z section and redirect
+            window.scrollTo(0, 2000); // Adjust the value to the position of your section
+            window.location.href = `women?id=${"Az"}`; // Replace with your URL
+        }
+    });
+
+
+
+    function buy(b) {
+        console.log(b, "idddd")
+
+        fetch(`  /product/whishlist?id=${b}`)
+            .then(response => response.text()) // Read the response as plain text
+            .then(data => {
+                if (data === "full") {
+                    console.log(data, "data")
+                    alert("full")
+                    Swal.fire("Cart is full!");
+                } else {
+                    let buyButton = document.getElementById(b);
+                    buyButton.style.color = "red";
+                    buyButton.innerHTML = "adding to cart ...";
+                    console.log(data, "not")
+                }
+            })
+    }
+
+
+
+    function toggleFilters() {
+        const filterSection = document.getElementById('filter-section');
+        if (filterSection.style.display === 'none' || filterSection.style.display === '') {
+            filterSection.style.display = 'block';
+        } else {
+            filterSection.style.display = 'none';
+        }
+    }
+</script>

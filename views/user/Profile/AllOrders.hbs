@@ -1,0 +1,611 @@
+<link rel="stylesheet" href="/assets/UserProfile/AllOrders.css">
+
+<style>
+    #showTimelineBtn {
+        padding: 12px 24px;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #4a90e2;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s;
+    }
+
+
+
+    .timeline-popup {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+    }
+
+    .timeline-content {
+        background-color: #ffffff;
+        margin: 10% auto;
+        padding: 30px;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 600px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.3s;
+    }
+
+    .close:hover {
+        color: #4a90e2;
+    }
+
+    h2 {
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    .timeline {
+        list-style-type: none;
+        padding: 0;
+        position: relative;
+    }
+
+    .timeline:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: #e0e0e0;
+        left: 20px;
+        margin: 0;
+        border-radius: 2px;
+    }
+
+    .timeline>li {
+        position: relative;
+        margin-bottom: 40px;
+    }
+
+    .timeline>li:last-child {
+        margin-bottom: 0;
+    }
+
+    .timeline>li>.timeline-panel {
+        margin-left: 50px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .timeline>li>.timeline-badge {
+        width: 14px;
+        height: 14px;
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        border-radius: 50%;
+        background-color: #e0e0e0;
+        z-index: 100;
+    }
+
+    .timeline>li.complete>.timeline-badge {
+        background-color: #4caf50;
+    }
+
+    .timeline-title {
+        margin-top: 0;
+        color: #333;
+        font-weight: 500;
+    }
+
+    .text-muted {
+        color: #6c757d;
+        font-size: 0.875rem;
+    }
+
+
+        {
+            {
+            !-- Return popup container --
+        }
+    }
+
+    /* General Styles */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Overlay */
+    .popup-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+
+    /* Return Order Form Popup */
+    .return-container {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        width: 90%;
+        max-width: 500px;
+        height: 500px;
+        /* Fixed height for the popup */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        overflow-y: auto;
+        /* Enable vertical scrolling if content exceeds height */
+    }
+
+    .return-container h2 {
+        margin-top: 0;
+        color: #333;
+    }
+
+    .return-container .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #333;
+    }
+
+    .return-container .form-group {
+        margin-bottom: 15px;
+    }
+
+    .return-container .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #666;
+    }
+
+    .return-container .form-group input[type="text"],
+    .return-container .form-group select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .return-container .form-group.product-details img {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+        vertical-align: middle;
+    }
+
+    .return-container .form-group.product-details input[type="text"] {
+        display: inline-block;
+        width: calc(100% - 60px);
+    }
+
+    .return-container .radio-group {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    .return-container .radio-group label {
+        cursor: pointer;
+        color: #666;
+    }
+
+    .return-container .radio-group input[type="radio"] {
+        margin-right: 5px;
+    }
+
+    /* Conditional Groups */
+    .conditional-group {
+        display: none;
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .conditional-group h3 {
+        margin-top: 0;
+        color: #333;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+        width: 100%;
+        padding: 10px 0;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+    }
+
+    .submit-btn:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+
+
+<div class="body">
+    <div class="container">
+        <header>
+            <nav>
+                <a href="#">HOME</a>
+                <span> / </span>
+                <a href="#">ORDERS</a>
+            </nav>
+            <h1>ORDERS</h1>
+        </header>
+        <table class="order-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Address</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {{#each Datas}}
+                {{#each items}}
+                <tr>
+
+                    <td>
+
+                        {{!-- <p id="orderIds" style="display: none;">{{orderId}}</p> --}}
+
+                        <img src="/upload/{{productId.image.[0]}}" alt="Product 2">
+                        <div class="product-details">
+                            <h2 id="productName">{{productId.name}}</h2>
+
+                        </div>
+
+
+                    </td>
+
+                    <td>
+
+                        Rs{{price}}
+
+
+                    </td>
+
+
+                    <td>
+                        <p>{{../shippingAddress.fullName}}</p>
+                        {{../shippingAddress.address}}<br>
+                        <p>{{../shippingAddress.city}},{{../shippingAddress.state}},{{../shippingAddress.postalCode}}
+                        </p>
+                    </td>
+                    <td>{{quantity}} </td>
+                    <td>₹{{totalPrice price quantity}}</td>
+                    <td>
+                        {{#ifEquals ../status "Faild"}}
+                        <p class="status shipped" style="color: rgb(212, 30, 100);">Payment is Faild -
+                            {{../deliveryDate}}
+                            <button class="track-order-button" onclick="Paynow('{{_id}}','{{../_id}}')">
+                                Pay Now </button>
+                            {{else}}
+                            {{#ifEquals update "Pending"}}
+
+                        <p class="status shipped" style="color: rgb(212, 30, 100);">Order Placed - {{../deliveryDate}}
+                        </p>
+                        <button onclick="sweetalert('{{this._id}}')" class="cancel-order-button">Cancel Order</button>
+                        {{else ifEquals update "Shipped"}}
+                        <button onclick="sweetalert('{{this._id}}')" class="cancel-order-button">Cancel Order</button>
+
+
+                        <p class="status shipped" style="color: rgb(37, 218, 13);">Product Shipped --{{../deliveryDate}}
+                        </p>
+                        {{ else ifEquals update "Delivered"}}
+                        <p class="status shipped" style="color: red;"> <br>Deliverd:- {{../deliveryDate}}</p>
+                        <button class="track-order-button"
+                            onclick="openPopup('{{productId.image.[0]}}','{{productId.name}}','{{price}}','{{../OrderId}}','{{_id}}')">Return
+                            Order</button>
+                        <button class="track-order-button" onclick="invoice('{{_id}}','{{../_id}}')">Download
+                            Invoice</button>
+                        {{else ifEquals update "Return"}}
+
+                        <div class="spinner-grow" role="status" style="width: 10px; height:10px ; background-color:">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <p style="color: red;">Return request is Pending</p>
+                        {{else ifEquals update "Approve Return"}}
+                        <p class="status shipped" style="color: rgb(37, 218, 13);">Amount is Debited to Wallet</p>
+                        <p class="date" class="status shipped">{{../orderedAt}}</p>
+                        {{else}}
+                        <p class="status shipped" style="color: red;">Cancelled</p>
+                        <p class="date" class="status shipped">{{../orderedAt}}</p>
+                        {{/ifEquals}}
+                        {{#ifEquals update "Processing"}}
+                        <p>processing</p>
+                        {{else}}
+                        {{/ifEquals}}
+                        {{/ifEquals}}
+                    </td>
+
+
+                </tr>
+                {{/each}}
+                {{/each}}
+
+
+            </tbody>
+        </table>
+    </div>
+</div>
+{{!-- popup --}}
+<!-- Add this HTML where you want the popup to appear, typically at the end of your body tag -->
+
+
+<div id="timeline-popup" class="timeline-popup">
+    <div class="timeline-content">
+        <span class="close">&times;</span>
+        <h2>Order Timeline</h2>
+        <ul class="timeline">
+            <li class="complete">
+                <div class="timeline-badge"></div>
+                <div class="timeline-panel">
+                    <div class="timeline-heading">
+                        <h4 class="timeline-title">Ordered</h4>
+                        <p><small class="text-muted"><span id="order-date"></span></small></p>
+                    </div>
+                </div>
+            </li>
+            <li class="complete">
+                <div class="timeline-badge"></div>
+                <div class="timeline-panel">
+                    <div class="timeline-heading">
+                        <h4 class="timeline-title">Packed</h4>
+                        <p><small class="text-muted"><span id="packed-date"></span></small></p>
+                    </div>
+                </div>
+            </li>
+            <li class="complete">
+                <div class="timeline-badge"></div>
+                <div class="timeline-panel">
+                    <div class="timeline-heading">
+                        <h4 class="timeline-title">Shipped</h4>
+                        <p><small class="text-muted"><span id="shipped-date"></span></small></p>
+                    </div>
+                </div>
+            </li>
+            <li class="incomplete">
+                <div class="timeline-badge"></div>
+                <div class="timeline-panel">
+                    <div class="timeline-heading">
+                        <h4 class="timeline-title">Delivery</h4>
+                        <p><small class="text-muted"><span id="delivery-date"></span></small></p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+
+{{!-- end pop --}}
+
+
+{{!-- POp for Return rquest --}}
+
+
+<!-- Popup Overlay -->
+<div class="popup-overlay" id="popupOverlay"></div>
+
+<!-- Return Order Form Popup -->
+
+
+<!-- Return Order Form Popup -->
+<div class="return-container" id="returnPopup">
+    <span class="close-btn" onclick="closePopup()">&times;</span>
+    <h2>Return Order Request</h2>
+    <form action="/profile/return" method="post" enctype="application/x-www-form-urlencoded">
+        <div class="form-group">
+            <label for="orderId">Order ID:</label>
+            <input type="text" id="RorderId" name="orderId" required>
+        </div>
+        <input style="display:none;" id="cartid1" name="cartid" value="">
+
+        <div class="form-group product-details">
+            <img id="Rimg" src="product-image.jpg" alt="Product Image">
+            <input type="text" id="RproductName" name="productName" placeholder="Product Name" value="" required>
+        </div>
+        <div class="form-group">
+            <label for="Price">Price:</label>
+            <input type="text" id="RPrice" name="Price" value="" required>
+        </div>
+        <div class="form-group">
+            <label for="reason">Reason for Return:</label>
+            <select id="reason" name="reason" required>
+                <option value="">Select Reason</option>
+                <option value="damaged">Damaged</option>
+                <option value="defective">Defective</option>
+                <option value="wrongItem">Wrong Item Sent</option>
+                <option value="notSatisfied">Not Satisfied</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Refund or Replacement:</label>
+            <div class="radio-group">
+                <label><input type="radio" name="returnOption" value="refund" onclick="toggleDetails('refund')"
+                        required>
+                    Refund to Bank</label>
+                <label><input type="radio" name="returnOption" value="Wallet" onclick="toggleDetails('Wallet')"
+                        required>
+                    Wallet
+                </label>
+                <label><input type="radio" name="returnOption" value="replacement"
+                        onclick="toggleDetails('replacement')">
+                    Replacement</label>
+            </div>
+        </div>
+        <div id="refundDetails" class="conditional-group">
+            <h3>Bank Account Details</h3>
+            <div class="form-group">
+                <label for="accountName">Account Name:</label>
+                <input type="text" id="accountName" name="accountName"
+                    title="Account Name should contain only letters and spaces.">
+                <p id="ac" style="color: red;">
+                </p>
+            </div>
+            <div class="form-group">
+                <label for="accountNumber">Account Number:</label>
+                <input type="text" id="accountNumber" name="accountNumber"
+                    title=" Account Number should be between 8 and 16 digits.">
+            </div>
+            <div class="form-group">
+                <label for="bankName">Bank Name:</label>
+                <input type="text" id="bankName" name="bankName">
+            </div>
+            <div class="form-group">
+                <label for="bankId">IFSC Code:</label>
+                <input type="text" id="IFSC" name="IFSCode">
+            </div>
+        </div>
+        <div id="replacementDetails" class="conditional-group">
+            <h3>Select Size</h3>
+            <div class="form-group">
+                <label for="size">Size:</label>
+                <select id="size" name="size">
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                </select>
+            </div>
+        </div>
+        <div id="walletDetails" class="conditional-group">
+            <p type="name" name="Wallets">Wallet</p>
+
+        </div>
+        <!-- Submit Button placed here -->
+        <button type="submit" class="submit-btn">Submit Return Request</button>
+    </form>
+</div>
+
+{{!-- end ponp return request--}}
+<script>
+    date = document.getElementById("date").innerHTML
+    console.log(date)
+    function sweetalert(id) {
+        console.log(id, "iddd")
+        Swal.fire({
+            title: "Do you want to Cancel this Product?",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to another page when "Edit" is clicked
+                window.location.href = `/cart/cancelorder/?id=${id} `;  // Replace ' / edit - page' with your target URL
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire("Action canceled", "", "info");
+            }
+        });
+
+    }
+
+
+    // popup
+
+    // Add this JavaScript to your script file
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const showTimelineBtn = document.getElementById('change');
+        const popup = document.getElementById('timeline-popup');
+        const closeBtn = document.querySelector('.close');
+
+        showTimelineBtn.addEventListener('click', function () {
+            document.getElementById('order-date').textContent = 'Tue, 21st Jul \'20';
+            document.getElementById('packed-date').textContent = 'Tue, 21st Jul \'20';
+            document.getElementById('shipped-date').textContent = 'Tue, 21st Jul \'20';
+            document.getElementById('delivery-date').textContent = 'Expected by Fri, 31st Jul \'20';
+
+            popup.style.display = 'block';
+        });
+
+        closeBtn.onclick = function () {
+            popup.style.display = 'none';
+        }
+
+        window.onclick = function (event) {
+            if (event.target == popup) {
+                popup.style.display = 'none';
+            }
+        }
+    });
+
+
+    // Popup Return..................
+
+    function openPopup(img, name, price, id, id1) {
+        console.log(img, name, price, id, id1)
+        document.getElementById('popupOverlay').style.display = 'block';
+        document.getElementById('returnPopup').style.display = 'block';
+        document.getElementById('RorderId').value = id
+        document.getElementById('Rimg').src = `/upload/${img}`
+        document.getElementById('RproductName').value = name
+        document.getElementById('cartid1').value = id1
+        document.getElementById('RPrice').value = "₹" + price
+    }
+
+    function closePopup() {
+        document.getElementById('popupOverlay').style.display = 'none';
+        document.getElementById('returnPopup').style.display = 'none';
+    }
+
+    function toggleDetails(option) {
+        document.getElementById('refundDetails').style.display = option === 'refund' ? 'block' : 'none';
+        document.getElementById('walletDetails').style.display = option === 'Wallet' ? 'block' : 'none';
+        document.getElementById('replacementDetails').style.display = option === 'replacement' ? 'block' : 'none';
+    }
+
+    // Account validation
+    function invoice(pId, oId) {
+        console.log(pId, oId, "idsss")
+        window.location.href = `/cart/invoice?productId=${pId}&orderId=${oId} `;  // Replace ' / edit - page' with your target URL
+
+    }
+    function Paynow(id, id1) {
+        window.location.href = `/cart/paynow?id=${id}&orderId=${id1} `;
+    }
+
+</script>

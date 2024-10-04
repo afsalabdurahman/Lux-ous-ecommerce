@@ -1,0 +1,114 @@
+<link rel="stylesheet" href="/assets/admin/addproducts.css" type="text/css">
+<script type="text/javascript" src="/js/remove-products.js"></script>
+{{!--
+<link href="/node_modules/cropperjs/dist/cropper.min.css" rel="stylesheet"> --}}
+
+{{!-- cropper cdn --}}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+{{!-- end --}}
+
+<section style="background-color: #58736a; z-index:1">
+
+
+
+    <div class="container">
+        <div class="form-section">
+            <h4 style="color: #de4504;">
+                {{msg}}
+            </h4>
+            <h1 style="text-align: center;">Add New Product</h1>
+            <div class="basic-section">
+                <h2>Basic</h2>
+                <form action="/admin/uploaded" method="post" enctype="multipart/form-data"
+                    onsubmit="return validation()">
+                    <label for="product-title">Product title</label>
+                    <input type="txt" id="product-title" name="name" placeholder="Type here"
+                        onblur="validatename('product-title','hide1')">
+                    <p id="hide1" style="display: none; color:red">field is emty</p>
+
+                    <label for="description">Full description</label>
+                    <textarea id="full-description" name="description" placeholder="Type here" required=""></textarea>
+
+                    <div class="price-section">
+                        <div>
+                            <label for="regular-price">Brand</label>
+                            <input type="text" id="regular-price" name="Brand" placeholder="" required="">
+                        </div>
+
+                        <div>
+
+                            <label for="currency">category</label>
+                            <select id="currency" name="category">
+                                {{#each categories}}
+
+                                <option value="{{this.name}}"> {{this.name}} </option>
+
+                                {{/each}}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="promotional-price"> price</label>
+                            <input type="text" id="promotional-price" name="price" placeholder="$" required="">
+                        </div>
+                        <div>
+                            <label for="stock - quandity">stock</label>
+                            <input type="text" id="stock" name="stock" placeholder="no"
+                                onblur="validate('name','hide')">
+                            <p id="hide" style="display: none; color:red">must be postive integrity</p>
+                        </div>
+                        <div>
+                            <label for="stock - color"> Color</label>
+                            <input type="text" id="promotional-price" name="color" placeholder="no" required="">
+                        </div>
+                        <div>
+                            <label for="stock - color"> choose</label>
+                            <select type="text" id="size" name="size" placeholder="--choose--">
+                                <option value="small">Small</option>
+                                <option value="mediam">medium</option>
+                                <option value="large">large</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <label for="tax-rate">Discount rate</label>
+                    <input type="text" id="Discount" name="discount_price" placeholder="%" required="">
+                    <input id="imgedata" type="text" name="imgdatas" style="display: none;" />
+                    <input id="imgedata1" type="text" name="imgdatas1" style="display: none;" />
+                    <input id="x" type="text" name="x" style="display: none;" />
+                    <input id="y" type="text" name="y" style="display: none;" />
+                    <input id="imgids" type="text" name="imgid" style="display: none;" />
+                    <!-- New Category Section -->
+
+
+                    <!-- Publish Button -->
+
+
+            </div>
+        </div>
+
+        <aside class="image-preview-section">
+            <h2>Image Preview</h2>
+            <input type="file" id="image-upload" name="uploadimg" class="image-upload" accept="image/*"
+                style="display: none;" multiple="multiple">
+            <p id="hide-image" style="color: #de4504;"></p>
+            <button type="button" id="upload-btn" class="upload-btn">Upload Image</button>
+            <div class="image-preview" id="image-preview">
+                <!-- Image containers will be added dynamically here -->
+            </div>
+        </aside>
+    </div>
+
+    <div class="publish-button-container" style="text-align: center;">
+        <button type="submit" class="btn btn-info">Publish</button>
+    </div>
+    </form>
+
+</section>
+<script>
+
+</script>

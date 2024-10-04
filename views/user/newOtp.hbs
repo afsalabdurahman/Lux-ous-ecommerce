@@ -1,0 +1,81 @@
+<link rel='stylesheet' type='text/css' media='screen' href='/assets/newOtp.css'>
+<section class="body">
+
+    <div class="otp-container">
+        <form action="/home" method="post" enctype="application/json">
+            <h2>OTP Verification</h2>
+
+            <p>4 digit verification code sent to Your Email</p>
+            <p style="color: red;">{{msg}}</p>
+            <a href="#" class="check-email">Check your Email</a>
+            <div class="otp-inputs">
+                <input type="text" maxlength="1" name="one">
+                <input type="text" maxlength="1" name="two">
+                <input type="text" maxlength="1" name="three">
+                <input type="text" maxlength="1" name="four">
+            </div>
+            <p class="resend-otp"> Resend OTP in : <span id="timer">00:30</span></p>
+
+            <button id="verifyBtn">verify</button>
+        </form>
+    </div>
+
+</section>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+    let timerElement = document.getElementById("timer");
+    let timeLeft = 120; // 2 minutes in seconds
+
+    let timer = setInterval(function () {
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            timerElement.textContent = "00:00";
+            document.querySelector(".resend-otp").innerHTML = 'Resend OTP in : <a href="/resentotp" id="regenerateOTP">Regenerate OTP</a>';
+            document.getElementById("regenerateOTP").addEventListener("click", function (event) {
+                //event.preventDefault();
+                // Add logic here to regenerate OTP and restart the timer
+                restartTimer();
+            });
+        } else {
+            timeLeft--;
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+        }
+    }, 1000);
+
+    document.getElementById("verifyBtn").addEventListener("click", function () {
+        console.log("verify");
+    });
+
+    function restartTimer() {
+        timeLeft = 120;
+        timerElement.textContent = `02:00`;
+        document.querySelector(".resend-otp").innerHTML = `Resend OTP in : <span id="timer">02:00</span>`;
+        timerElement = document.getElementById("timer");
+        timer = setInterval(function () {
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                timerElement.textContent = "00:00";
+                document.querySelector(".resend-otp").innerHTML = 'Resend OTP in : <a href="/resentotp" id="regenerateOTP">Regenerate OTP</a>';
+                document.getElementById("regenerateOTP").addEventListener("click", function (event) {
+                    //   event.preventDefault();
+                    // Add logic here to regenerate OTP and restart the timer
+                    alert("OTP regenerated!");
+                    restartTimer();
+                });
+            } else {
+                timeLeft--;
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                timerElement.textContent = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+            }
+        }, 1000);
+    }
+});
+
+
+
+</script>

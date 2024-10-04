@@ -1,0 +1,51 @@
+ <script src='/js/otp.js'></script>
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+<div class="container height-100 d-flex justify-content-center align-items-center">
+    <div class="position-relative"> 
+        <div class="card p-2 text-center"> 
+            {{#if msg}}
+            <p style="color: red;">{{msg}}</p>
+            {{else}}
+            {{/if}}
+            <h6>Please enter the one time password <br> to verify your account</h6>
+             <div> <span>A code has been sent to</span> <small>*******9897</small>
+              </div> <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
+                <form action="/home" method="post" enctype="application/json">
+                <input class="m-2 text-center form-control rounded" type="text" id="first" maxlength="1" name="one" /> 
+                <input class="m-2 text-center form-control rounded" type="text" id="second" maxlength="1" name="two"/> 
+                <input class="m-2 text-center form-control rounded" type="text" id="third" maxlength="1" name="three" /> 
+                <input class="m-2 text-center form-control rounded" type="text" id="fourth" maxlength="1" name="four" /> 
+                
+                
+                </div> <div class="mt-4"> <button type="submit" class="btn btn-danger px-4 validate">Validate</button>
+</form>
+
+                </div> </div> <div class="card-2"> <div class="content d-flex justify-content-center align-items-center">
+                     <span>Didn't get the code</span> <a  class="text-decoration-none ms-3" id="refresh" href="/resentotp" >Resend</a> </div> </div> 
+                     <div id="Timer" style="background-color: red;"></div>
+                     </div>
+</div>
+
+
+<script>
+   
+ 
+
+
+    var timeLeft = 30;
+var elem = document.getElementById('Timer');
+
+var timerId = setInterval(countdown, 1000);
+
+function countdown() {
+  if (timeLeft == 0) {
+    clearTimeout(timerId);
+    doSomething();
+  } else {
+    elem.innerHTML = timeLeft + ' seconds remaining';
+    timeLeft--;
+  }
+}
+</script>

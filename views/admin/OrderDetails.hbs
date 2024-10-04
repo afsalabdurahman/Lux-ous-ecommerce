@@ -1,0 +1,438 @@
+<style>
+    .body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    .order-details-container {
+        background-color: #fff;
+        max-width: 880px;
+        margin: 20px auto;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    /* Order Header Section */
+    .order-header {
+        background-color: #e3f2fd;
+        border-bottom: 2px solid #90caf9;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .order-header h2 {
+        margin: 0;
+        font-size: 24px;
+        color: #1e88e5;
+    }
+
+    .order-header p {
+        margin: 5px 0;
+        font-size: 14px;
+        color: #555;
+    }
+
+    .order-date {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        color: #666;
+        margin-top: 5px;
+    }
+
+    .order-date i {
+        margin-right: 8px;
+    }
+
+    /* Order Info Section */
+    .order-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        gap: 20px;
+    }
+
+    .order-info .info-block {
+        flex: 1;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 15px;
+        background-color: #f1f8e9;
+        border-radius: 8px;
+    }
+
+    .order-info .info-block i {
+        font-size: 24px;
+        color: #66bb6a;
+    }
+
+    .order-info .info-block p {
+        margin: 2px 0;
+        color: #666;
+    }
+
+    .order-info .info-block p strong {
+        color: #333;
+    }
+
+    /* Order Table Section */
+    .order-table {
+        background-color: #fff3e0;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border: 1px solid #ffcc80;
+    }
+
+    .order-table table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    .order-table th,
+    .order-table td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    .order-table th {
+        background-color: #ffe0b2;
+    }
+
+    .order-table img {
+        width: 50px;
+        border-radius: 5px;
+    }
+
+    .order-placed {
+        color: #ff7043;
+        font-weight: bold;
+        display: inline-block;
+        padding: 5px 10px;
+        background-color: #ffe0b2;
+        border-radius: 4px;
+    }
+
+    .approve-btn {
+        background-color: #ff7043;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .approve-btn:hover {
+        background-color: #e64a19;
+    }
+
+    /* Payment Info Section */
+    .message-btn {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    /* Overlay */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    /* Popup Box */
+    .popup-content {
+        position: relative;
+        background-color: white;
+        padding: 20px;
+        width: 500px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    /* Close Icon */
+    .close-icon {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #aaa;
+    }
+
+    /* Buttons */
+    .popup-content button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 14px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+    }
+
+    .approve-btn {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .reject-btn {
+        background-color: #f44336;
+        color: white;
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<div class="body">
+    <div class="order-details-container">
+        <div class="order-header">
+            <h2>Order details</h2>
+            Details for Order ID: <strong>{{Data.OrderId}}</strong></p>
+            <div class="order-date"><i class="fas fa-calendar-alt"></i><span>08 03 2024 10:43:40</span></div>
+        </div>
+        <div class="order-info">
+            <div class="customer-info"><i class="fas fa-user-circle"></i>
+                <div>
+                    <p><strong>Customer</strong></p>
+                    <p>{{Data.shippingAddress.fullName}}</p>
+                    <p>{{Data.userId.email}}</p>
+                    <p>{{Data.userId.mobile}}</p>
+                </div>
+            </div>
+            <div class="order-info-details"><i class="fas fa-info-circle"></i>
+                <div>
+                    <p><strong>Order info</strong></p>
+                    <p>Shipping: <strong>{{Data.paymentMethod}}</strong></p>
+                    <p>Pay method: <strong>{{Data.paymentMethod}}</strong></p>
+                </div>
+            </div>
+            <div class="delivery-info"><i class="fas fa-map-marker-alt"></i>
+                <div>
+                    <p><strong>Deliver to</strong></p>
+                    <p>Full Name: {{Data.shippingAddress.fullName}}</p>
+                    <p>Address Line: {{Data.shippingAddress.address}}</p>
+                    <p>City: {{Data.shippingAddress.city}}</p>
+                    <p>State: {{Data.shippingAddress.state}}</p>
+                    <p>Pincode: {{Data.shippingAddress.postalCode}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="order-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Unit Price</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                        {{#if usercart.ReturnStatus}}
+                        <th>Return Reason</th>
+                        {{else}}
+                        {{/if}}
+                        {{#ifEquals Data.items.[0].update "Return"}}
+                        <th>Return status</th>
+
+                        <th id="Return">Return</th>
+                        {{else ifEquals Data.items.[0].update "Approve Return" }}
+
+
+                        <th id="Return">Return</th>
+                        {{else}}
+                        <th id="cancel2">Order cancel</th>
+                        <th id="ship2">Order shipped</th>
+                        {{/ifEquals}}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><img src="/upload/{{Data.items.[0].productId.image.[0]}}" alt="Product Image"></td>
+                        <td>₹{{Data.items.[0].price}}</td>
+                        <td>{{Data.items.[0].quantity}}</td>
+                        <td><span class="order-placed" id="status">{{Data.items.[0].update}}</span></td>
+                        <td>₹{{totalPrice Data.items.[0].price Data.items.[0].quantity}}</td>
+                        {{#ifEquals Data.items.[0].update "Approve Return" }}
+                        <td>Yes</td>
+                        {{else}}
+                        {{/ifEquals}}
+                        {{!-- {{#if usercart.ReturnStatus}} --}}
+                        {{#ifEquals Data.items.[0].update "Approve Return" }}
+                        {{else}}
+                        {{#ifEquals Data.items.[0].update "Return"}}
+                        <td><button class="approve-btn" id="approve" onclick="togglePopup()">Check</button></td>
+                        {{else}}
+
+                        {{#ifEquals Data.items.[0].update "Shipped"}}
+
+                        <td id="cancel1"><button class="approve-btn" id="Cancel"
+                                onclick="Cancel('{{id}}')">Cancel</button>
+                        </td>
+                        <td id="ship"><button class="approve-btn" id="Shipped"
+                                onclick="Deliver('{{id}}','{{Data.items.[0].quantity}}','{{getId Data.items.[0].productId}}')">Deliver</button>
+                        </td>
+                        {{else ifEquals Data.items.[0].update "Delivered" }}
+                        {{else}}
+                        <td id="ship"><button class="approve-btn" id="Shipped"
+                                onclick="Shipped('{{id}}')">Shipped</button>
+                        <td id="cancel1"><button class="approve-btn" id="Cancel"
+                                onclick="Cancel('{{id}}')">Cancel</button>
+                        </td>
+                        {{/ifEquals}}
+                        {{/ifEquals}}
+                        {{/ifEquals}}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="payment-info">
+            <p><strong>Payment info</strong></p>
+            <p><i class="fas fa-money-bill-alt"></i>{{Data.paymentMethod}}</p>
+            <p>{{usercart.Username}}</p>
+            <p>7676565434</p>
+        </div>
+    </div>
+</div>
+{{!-- popup box --}}
+{{#ifEquals Data.items.[0].update "Return"}}
+<div class="overlay" id="popupOverlay">
+    <div class="popup-content">
+        <span class="close-icon" onclick="togglePopup()">&times;</span>
+        <h1>Return Detail</h1>
+        <p><strong>Reason for Return:</strong> {{ReturnStatus.ReturnReason}}</p>
+        <p><strong>Order ID:</strong> #{{ReturnStatus.OrderId}}</p>
+        <p><strong> Name:</strong> {{Data.shippingAddress.fullName}}</p>
+        </p>
+        <p><strong> Account Details:</strong><br>Lux-{{ReturnStatus.ReturnOption}},<br>
+            {{ReturnStatus.RefundAccName}},{{ReturnStatus.RefundAccNumber}},<br>{{ReturnStatus.RefundAccIFSC}}</p>
+
+        <button class="approve-btn" onclick="funs('{{ReturnStatus.OrderId}}')">Approve</button>
+        <button class="reject-btn">Reject</button>
+    </div>
+</div>
+{{else}}
+{{/ifEquals}}
+
+<script>
+
+    function Cancel(b) {
+        console.log(b, "idd")
+        Swal.fire({
+            title: "Do you want to Cancel this Order?",
+            showDenyButton: true,
+
+            confirmButtonText: "Yes",
+            denyButtonText: `No`
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Cancelled!",
+                    text: "Order has been cancelled.",
+                    icon: "success"
+                });
+                window.location.href = `/admin/cancel-order?id=${b}`;
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+            }
+        });
+
+
+    }
+
+    function funs(id) {
+        console.log(b)
+
+        window.location.href = `/admin/orders/returnreq?id=${id}`
+    }
+
+    function Shipped(ship) {
+        Swal.fire({
+            title: "Do you want to shipped this Order?",
+            showDenyButton: true,
+
+            confirmButtonText: "Yes",
+            denyButtonText: `No`
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "shipped!",
+                    text: "Order has been Shipped.",
+                    icon: "success"
+                });
+                window.location.href = `/admin/shipped-order?id=${ship}`;
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+            }
+        });
+
+    }
+    //Deliver
+    function Deliver(ship, qty, Pid) {
+        console.log(qty, "qty++++", Pid, "++++++pid")
+        Swal.fire({
+            title: "Do you want to Deliver this Order?",
+            showDenyButton: true,
+
+            confirmButtonText: "Yes",
+            denyButtonText: `No`
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Delivered!",
+                    text: "Order has been Deliverd.",
+                    icon: "success"
+                });
+                window.location.href = `/admin/deliver-order?id=${ship}&qtyno=${qty}&pId=${Pid}`;
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+            }
+        });
+
+    }
+
+
+
+    function togglePopup() {
+
+        var popupOverlay = document.getElementById("popupOverlay");
+        if (popupOverlay.style.display === "none" || popupOverlay.style.display === "") {
+            popupOverlay.style.display = "flex";
+        } else {
+            popupOverlay.style.display = "none";
+        }
+    }
+
+
+
+    b = document.getElementById('status').innerHTML
+    console.log(b)
+    if ("Deliverd" == document.getElementById('status').innerHTML) {
+        document.getElementById('ship').style.display = "none"
+        document.getElementById('ship2').style.display = "none"
+    } else if ("Cancelled" == document.getElementById('status').innerHTML) {
+        document.getElementById('ship').style.display = "none"
+        document.getElementById('ship2').style.display = "none"
+        document.getElementById('cancel1').style.display = "none"
+        document.getElementById('cancel2').style.display = "none"
+    }
+</script>

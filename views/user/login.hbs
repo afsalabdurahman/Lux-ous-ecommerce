@@ -1,0 +1,84 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel='stylesheet' type='text/css' media='screen' href='/assets/login.css'>
+<section style="height: 630px;">
+    <div class="content" style="margin-top: 6em;">
+        <form action="/login" method="post" class="signin-form" enctype="application/x-www-form-urlencoded"
+            onsubmit="return validateForm()">
+            {{#if user}}
+            <p style="text-align: center;color:red; ">User is Exist</p>
+            {{else}}
+            {{/if}}
+            <h4 style="color: red; text-align: center; font-family:'monospace">{{msg}}</h4>
+            <h2>Sign In</h2>
+
+            <div class="input-bx">
+                <input type="text" required onblur="emailCheckings()" placeholder="email" name="email" id="email">
+                <div id="erroremail" class="mt-0 ms-2 position-absolute text-danger"></div>
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="input-bx">
+                <input type="password" id="password" required placeholder="Password" onblur="passwordCheckings()"
+                    name="password">
+
+                <i class="fa-solid fa-key"></i>
+                <a href="/forgetpsw">
+                <p style="margin-top: 1em;">forgot password?</p></a>
+                <div id="errorpassword" class="mt-0 ms-2 position-absolute text-danger"></div>
+            </div>
+
+            <button class="btn-signin" type="submit">Sign In <i class="fa-solid fa-right-to-bracket"></i></button>
+
+            <div class="option-text">
+                <hr>
+                <p>or sign in with</p>
+            </div>
+
+
+
+            <p style="" class="message"><a href="/register">Do you want to Register? click here</a></p>
+        </form>
+        <div class="button-group">
+            <a href="/auth/google"> <button class="btn-google" type="submit">Google <i
+                        class="fa-brands fa-google"></i></button></a>
+            <button class="btn-facebook">Facebook <i class="fa-brands fa-facebook"></i></i></button>
+        </div>
+
+
+    </div>
+</section>
+<script>
+    function emailCheckings() {
+        let emailId = document.getElementById("email").value;
+        console.log(emailId)
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(emailId)) {
+            document.getElementById("erroremail").innerHTML = "Please enter a valid email.";
+            return false;
+        } else {
+            document.getElementById("erroremail").innerHTML = "";
+            return true;
+        }
+    }
+    function passwordCheckings() {
+        let password = document.getElementById("password").value;
+        console.log(password)
+        if (password === "") {
+            document.getElementById("errorpassword").innerHTML = "Please enter your password.";
+            return false;
+        } else if (password.length < 8) {
+            document.getElementById("errorpassword").innerHTML = "Please enter a minimum of 8 characters.";
+            return false;
+        } else {
+            document.getElementById("errorpassword").innerHTML = "";
+            return true;
+        }
+    }
+
+    function validateForm() {
+        return emailChecking() && passwordChecking();
+    }
+</script>
